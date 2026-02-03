@@ -1,0 +1,7 @@
+name: Debug Trigger
+on: push
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Trigger success"
