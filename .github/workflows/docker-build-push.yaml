@@ -1,4 +1,5 @@
 name: Build and Push Wisecow Image
+# Trigger test
 
 on:
   push:
