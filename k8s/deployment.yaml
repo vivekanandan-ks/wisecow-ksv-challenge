@@ -19,7 +19,7 @@ spec:
       - name: ghcr-secret
       containers:
       - name: wisecow
-        image: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:dummytag
+        image: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:main-e933e69b53f2c73b92f23853f79f7ac30117c9c7
         imagePullPolicy: Always
         ports:
         - containerPort: 4499
