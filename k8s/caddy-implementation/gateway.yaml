@@ -1,10 +1,17 @@
 apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: caddy
+spec:
+  controllerName: caddy.caddyserver.com/gateway-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: wisecow-gateway
+  name: wisecow-caddy-gateway
   namespace: default
 spec:
-  gatewayClassName: envoy
+  gatewayClassName: caddy
   listeners:
   - name: http
     protocol: HTTP
@@ -22,5 +29,5 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: wisecow-tls-secret
+      - name: wisecow-local-tls
         kind: Secret

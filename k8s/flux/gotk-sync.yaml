@@ -1,0 +1,29 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: wisecow-repo
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://github.com/vivekanandan-ks/wisecow-ksv-challenge
+  ref:
+    branch: main
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: wisecow-app
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: "./k8s"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: wisecow-repo
+  targetNamespace: default
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: wisecow-image-tag

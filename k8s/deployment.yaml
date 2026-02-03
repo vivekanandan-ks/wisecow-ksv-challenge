@@ -15,9 +15,11 @@ spec:
       labels:
         app: wisecow
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
       - name: wisecow
-        image: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:latest
+        image: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:dummytag
         imagePullPolicy: Always
         ports:
         - containerPort: 4499

@@ -6,6 +6,8 @@ metadata:
 spec:
   parentRefs:
   - name: wisecow-gateway
+  hostnames:
+  - wisecow.local
   rules:
   - matches:
     - path:

@@ -1,0 +1,45 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: wisecow-image
+  namespace: flux-system
+spec:
+  image: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
+  interval: 1m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: wisecow-policy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: wisecow-image
+  policy:
+    alphabetical:
+      order: asc
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: wisecow-automation
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: wisecow-repo
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+      messageTemplate: 'chore: update wisecow image to {{range .UpdatedDetails}}{{.CurrentImage}}{{end}}'
+    push:
+      branch: main
+  update:
+    path: ./k8s
+    strategy: Setters

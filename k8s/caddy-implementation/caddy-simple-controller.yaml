@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy-gateway-controller
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy-controller
+  template:
+    metadata:
+      labels:
+        app: caddy-controller
+    spec:
+      serviceAccountName: caddy-gateway-controller
+      containers:
+      - name: controller
+        image: ghcr.io/caddyserver/gateway:latest
+        args:
+        - --leader-elect

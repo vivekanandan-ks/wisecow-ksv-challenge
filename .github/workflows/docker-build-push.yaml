@@ -36,3 +36,16 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ github.sha }}
+
+      - name: Update Kubernetes deployment manifest
+        run: |
+          IMAGE_TAG="${{ github.ref_name }}-${{ github.sha }}"
+          sed -i "s|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG|" k8s/deployment.yaml
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add k8s/deployment.yaml
+          git commit -m "chore: update wisecow image to ${{ github.ref_name }}-${{ github.sha }} [skip ci]"
+          git push
