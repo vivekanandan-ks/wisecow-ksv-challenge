@@ -1,0 +1,1 @@
+podman run --rm -p 4499:4499 ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:latest

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wisecow
+  namespace: default
+  labels:
+    app: wisecow
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wisecow
+  template:
+    metadata:
+      labels:
+        app: wisecow
+    spec:
+      containers:
+      - name: wisecow
+        image: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4499
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
