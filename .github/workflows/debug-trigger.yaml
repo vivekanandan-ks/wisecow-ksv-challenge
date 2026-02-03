@@ -1,5 +1,9 @@
 name: Debug Trigger
-on: push
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
 jobs:
   debug:
     runs-on: ubuntu-latest
