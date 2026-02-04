@@ -7,9 +7,6 @@ resources:
 - gateway.yaml
 - httproute.yaml
 - tls.yaml
-- cert-manager.yaml
-- envoy-gateway.yaml
-- envoy-gatewayclass.yaml
 
 images:
 - name: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge

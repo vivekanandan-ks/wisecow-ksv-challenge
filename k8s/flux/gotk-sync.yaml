@@ -12,13 +12,30 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: infrastructure
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: "./k8s/infrastructure"
+  prune: true
+  wait: true
+  timeout: 5m0s
+  sourceRef:
+    kind: GitRepository
+    name: wisecow-repo
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: wisecow-app
   namespace: flux-system
 spec:
   interval: 5m0s
-  path: "./k8s"
+  path: "./k8s/apps"
   prune: true
   wait: true
   sourceRef:
     kind: GitRepository
     name: wisecow-repo
+  dependsOn:
+    - name: infrastructure
