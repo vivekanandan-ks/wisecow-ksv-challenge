@@ -2,16 +2,16 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - deployment.yaml
-  - service.yaml
-  - gateway.yaml
-  - httproute.yaml
-  - tls.yaml
-  - cert-manager.yaml
-  - envoy-gateway.yaml
-  - envoy-gatewayclass.yaml
+- deployment.yaml
+- service.yaml
+- gateway.yaml
+- httproute.yaml
+- tls.yaml
+- cert-manager.yaml
+- envoy-gateway.yaml
+- envoy-gatewayclass.yaml
 
 images:
-  - name: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
-    newName: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
-    newTag: dummytag
+- name: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
+  newName: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
+  newTag: main-6ee5905999e3f87126d83845e56b46244786df52
