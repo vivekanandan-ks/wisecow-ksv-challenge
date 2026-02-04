@@ -1,0 +1,9 @@
+apiVersion: operator.kubearmor.com/v1
+kind: KubeArmorConfig
+metadata:
+  name: kubearmor-config
+  namespace: kubearmor
+spec:
+  defaultFilePosture: audit
+  defaultNetworkPosture: audit
+  defaultCapabilitiesPosture: audit
