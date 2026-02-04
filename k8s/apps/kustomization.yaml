@@ -11,4 +11,4 @@ resources:
 images:
 - name: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
   newName: ghcr.io/vivekanandan-ks/wisecow-ksv-challenge
-  newTag: main-75644371c5e4af9bca977085898863d7db1285c0
+  newTag: main-a49a370c2508996898255426f36e0d8c352cfb92
