@@ -1,1 +1,7 @@
 podman run --rm -p 4499:4499 ghcr.io/vivekanandan-ks/wisecow-ksv-challenge:latest
+
+sudo k0s kubectl get svc -n envoy-gateway-system
+
+curl -v -H "Host: wisecow.local" http://10.103.189.160
+
+curl -v -k --resolve "wisecow.local:443:10.103.189.160" https://wisecow.local
