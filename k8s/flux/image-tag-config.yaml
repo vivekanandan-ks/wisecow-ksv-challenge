@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: wisecow-image-tag
-  namespace: default
-data:
-  WISECOW_TAG: "latest" # This is the default. 

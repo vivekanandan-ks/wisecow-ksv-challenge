@@ -23,7 +23,3 @@ spec:
     kind: GitRepository
     name: wisecow-repo
   targetNamespace: default
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: wisecow-image-tag
