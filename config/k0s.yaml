@@ -1,0 +1,18 @@
+apiVersion: k0s.k0sproject.io/v1beta1
+kind: ClusterConfig
+metadata:
+  name: k0s
+spec:
+  extensions:
+    helm:
+      concurrencyLevel: 5
+      repositories:
+      - name: kubearmor
+        url: https://kubearmor.github.io/charts
+      charts:
+      - name: kubearmor-operator
+        chartname: kubearmor/kubearmor-operator
+        version: "v1.6.6"
+        namespace: kubearmor
+        values: |
+          autoDeploy: true

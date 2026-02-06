@@ -1,0 +1,28 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: wisecow-hardening
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: wisecow
+  process:
+    matchPaths:
+    - path: /usr/bin/apt
+      action: Block
+    - path: /usr/bin/apt-get
+      action: Block
+    - path: /usr/bin/dpkg
+      action: Block
+  file:
+    matchPaths:
+    - path: /etc/shadow
+      action: Block
+    - path: /etc/passwd
+      action: Block
+    matchDirectories:
+    - dir: /run/secrets/kubernetes.io/serviceaccount/
+      recursive: true
+      action: Block
+  action: Audit

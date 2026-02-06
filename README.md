@@ -1,6 +1,14 @@
 # Wisecow - DevOps Practical Assessment
 
+> **TL;DR:** See the `artifacts/` directory for a consolidated view of all deliverables organized by Problem Statement if u feel like not reading much today :-)
+
 This repository contains the solution for the Accuknox DevOps Trainee Practical Assessment. It demonstrates the containerization, deployment, security hardening, and monitoring of the "Wisecow" application.
+
+> **If u are curious**: Read the last section 
+
+> **Note on HTTPS:** Since a registered public domain is not available for this assessment (preventing ACME/Let's Encrypt validation), **self-signed certificates** are used to demonstrate secure TLS termination.
+
+> **Note on CD:** **FluxCD** is implemented for GitOps-based Continuous Deployment, automating the synchronization of Kubernetes manifests from this repository to the cluster.
 
 ## Project Structure
 
@@ -55,7 +63,6 @@ The applied policy (`wisecow-hardening`) enforces the following rules on the Wis
 *   **Block Package Managers:** Prevents execution of `apt`, `apt-get`, and `dpkg` to stop unauthorized tool installation.
 *   **Block Sensitive Files:** Denies read access to `/etc/shadow` and `/etc/passwd`.
 *   **Block Service Tokens:** Denies access to Kubernetes Service Account tokens to prevent lateral movement.
-*   **Audit:** All other process executions are audited.
 
 ---
 
@@ -68,8 +75,11 @@ This project uses `k0s` as the Kubernetes distribution.
 curl -sSLf https://get.k0s.sh | sudo sh
 ```
 
-### 2. Configure Cluster (with KubeArmor)
-Copy the provided configuration file which includes the KubeArmor Helm chart extension.
+### 2. Configure Cluster
+Copy the provided configuration file.
+
+> **Note:** `k0s` natively supports Helm charts, which can be defined directly in the configuration file (`/etc/k0s/k0s.yaml`). In this project, **KubeArmor** is installed using this method as a cluster extension.
+
 ```bash
 sudo mkdir -p /etc/k0s
 # Assuming you are in the project root
@@ -79,8 +89,7 @@ sudo cp config/k0s.yaml /etc/k0s/k0s.yaml
 ### 3. Start the Cluster
 Initialize the controller with the configuration.
 ```bash
-sudo k0s install controller --single --config /etc/k0s/k0s.yaml
-sudo k0s start
+sudo k0s start controller --single --config /etc/k0s/k0s.yaml
 ```
 Wait for the node to become ready and for KubeArmor pods to start (check `sudo k0s kubectl get pods -n kubearmor`).
 
@@ -107,26 +116,20 @@ sudo k0s kubectl apply -f k8s/security/wisecow-hardening.yaml
 
 ## Verification Steps
 
-### 1. Verify Application (HTTP)
-The application is exposed via NodePort on port `32202` for HTTP.
+### 1. Verify Application and TLS
+Run the automated health check script to verify both HTTP and HTTPS endpoints. This script automatically detects the gateway IP and performs the necessary checks.
+
 ```bash
-# Replace 192.168.1.7 with your node IP
-curl -v http://192.168.1.7:32202
+bash tests/application_health_test.sh
 ```
-**Expected Output:** The "Wisecow" ASCII art response.
+**Expected Output:**
+Along with hte output you'll see these:
+✅ HTTP Test PASSED (Status: 200)
 
-### 2. Verify TLS (HTTPS)
-The application is exposed via NodePort on port `32220` for HTTPS.
-Note: You must use the hostname `wisecow.local` for the TLS handshake to succeed (SNI match).
-
-**Using Curl:**
-```bash
-# Replace 192.168.1.7 with your node IP
-curl -v -k --resolve wisecow.local:32220:192.168.1.7 https://wisecow.local:32220
+✅ HTTPS Test PASSED (Status: 200)
 ```
-**Expected Output:** Successful TLS handshake (TLS 1.3) and the Wisecow response.
 
-### 3. Verify Security (KubeArmor)
+### 2. Verify Security (KubeArmor)
 Attempt to read a sensitive file inside the application pod to test the blocking policy.
 
 **Command:**
@@ -136,3 +139,6 @@ sudo k0s kubectl exec -it $POD -- cat /etc/shadow
 ```
 **Expected Output:**
 `cat: can't open '/etc/shadow': Permission denied`
+
+**NOTE TO THE READER:**
+I have a fundamentally better immutable and deterministic approach for the deployment of this. Like a more single source of truth appproach which could potentially remove the need for **Kubearmor** itself and can be setup easily with less moving parts and more rigid dependency management.
